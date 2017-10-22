@@ -76,7 +76,7 @@ function draw(){
 	}
 
 
-	for(int j = 0; j < 5000; j++){
+	for (int j = 0; j < 5000; j++){
 		allShapes.push(new Shape(r, g, b));
 	}
 
