@@ -1,3 +1,6 @@
+// test test
+
+
 var allShapes = [];
 var happySong;
 var chillSong;
@@ -53,7 +56,7 @@ function Shape(r, g, b){
 	this.moveAndDisplay = function(){
 		// Move with Perlin noise
 		// Change size based on waveform
-		// Add waveform's number to 
+		// Add waveform's number to
 	}
 }
 
@@ -74,7 +77,7 @@ function draw(){
 		b = random(100, 170);
 		energeticSong.play();
 	}
-	
+
 
 	for(int j = 0; j < 5000; j++){
 		allShapes.push(new Shape(r, g, b));
