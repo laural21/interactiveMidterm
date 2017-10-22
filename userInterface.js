@@ -11,8 +11,8 @@ var userInput;
 var mood;
 
 function setup(){
-	createCanvas(windowWidth, 100);
-	background(255);
+	createCanvas(windowWidth, windowHeight);
+	background(0);
 
 	fill(74, 2, 122);
 	text(question, width/2, 30); //CSS needed, size 30px, font-family?, color?
