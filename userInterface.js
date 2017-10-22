@@ -22,7 +22,7 @@ function setup(){
 
 	fill(255, 255, 255);
 	textSize(50);
-	text(question, width/2-250, 70); //CSS needed, size 30px, font-family?, color?
+	text(question, width/2-250, 40); //CSS needed, size 30px, font-family?, color?
 	// Create visible buttons which change style when they are verbally selected
 
 
