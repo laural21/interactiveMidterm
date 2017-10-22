@@ -1,6 +1,3 @@
-// test test
-
-
 var allShapes = [];
 var happySong;
 var chillSong;
