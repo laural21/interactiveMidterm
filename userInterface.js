@@ -2,7 +2,7 @@
 var voice;
 
 // Question
-var question = "What mood are you in?";
+var question = "What is your mood?";
 
 // Speech input
 var userInput;
