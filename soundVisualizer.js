@@ -7,9 +7,9 @@ var chillSong;
 var energeticSong;
 
 function preload(){
-	happySong = loadSound("happy.mp3");
-	chillSong = loadSound("chill.mp3");
-	energeticSong = loadSound("energetic.mp3");
+	happySong = loadSound("Music/happy.mp3");
+	chillSong = loadSound("Music/chill.mp3");
+	energeticSong = loadSound("Music/energetic.mp3");
 }
 
 
