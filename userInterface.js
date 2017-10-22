@@ -59,6 +59,6 @@ function chooseMood(){
 
 // Question only has to be asked once, when page is loaded or reloaded
 // Look for function/workaround for how to perform an action on page loaded
-function pageIsLoaded(){
+window.onload = function(){
 	voice.speak(question);
 }
