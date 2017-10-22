@@ -1,6 +1,7 @@
 // Computer voice that prompts the user to choose a mood
 var voice;
 
+
 // Question
 var question = "What is your mood?";
 
@@ -10,13 +11,20 @@ var userInput;
 // Mood (selected verbally)
 var mood;
 
+function preload(){
+	myFont = loadFont("Fonts/TitilliumWeb-ExtraLight.ttf");
+}
+
 function setup(){
 	createCanvas(windowWidth, windowHeight);
 	background(0);
+	textFont(myFont);
 
-	fill(74, 2, 122);
-	text(question, width/2, 30); //CSS needed, size 30px, font-family?, color?
+	fill(255, 255, 255);
+	textSize(50);
+	text(question, width/2-250, 70); //CSS needed, size 30px, font-family?, color?
 	// Create visible buttons which change style when they are verbally selected
+
 
 	// Create speech to text object
     userInput = new p5.SpeechRec();
