@@ -40,7 +40,27 @@ function setup(){
     userInput.start();
 }
 
-function draw(){}
+function draw(){
+	fill(255, 255, 255);
+	background(0);
+
+	textSize(50);
+	text(question, width/2-250, 50); //CSS needed, size 30px, font-family?, color?
+	// Create visible buttons which change style when they are verbally selected
+
+	// draw buttons
+	textSize(20);
+
+	drawButton(mouseX, mouseY, width/3 - 90, 80, 1);
+	drawButton(mouseX, mouseY, width/3 + 60, 80, 2);
+	drawButton(mouseX, mouseY, width/3 + 220, 80, 3);
+
+
+	fill(0);
+	text("happy", width/3 - 63, 102);
+	text("chill", width/3 + 98, 102);
+	text("energetic", width/3 + 232, 102);
+}
 
 function chooseMood(){
 
@@ -72,4 +92,60 @@ function chooseMood(){
 
 function keyPressed(){
 	voice.speak(question);
+}
+
+// button functions
+
+function mousePressed() {
+  // see if the user is clicking on the button
+  var clicked = isButtonPressed(mouseX, mouseY);
+
+	if (clicked == true) {
+		// start visualization
+	}
+
+}
+
+// function to draw our button
+function drawButton(testX, testY, buttonX, buttonY, mood) {
+
+  // if the supplied x & y position are over the button we should change our fill
+  // color to indicate that the user is "hovering" over the button
+  if (testX > buttonX && testX < buttonX+100 && testY > buttonY && testY < buttonY + 30) {
+		if (mood == 1) {
+			fill(0,255,0);
+		}
+		if (mood == 2) {
+			fill(0,0,255);
+		}
+		if (mood == 3) {
+			fill(255,0,0);
+		}
+  }
+
+  else if (mood == 1) {
+    fill(204, 255, 188);
+	}
+	else if (mood == 2) {
+		fill(165, 252, 255)
+	}
+	else if (mood == 3) {
+		fill(255, 155, 167);
+	}
+
+  rect(buttonX, buttonY, 100, 30);
+}
+
+// function to check for button presses
+function isButtonPressed(testX, testY) {
+
+  // now test to see if the user is over the button - if so, they are clicking on it!
+  if (testX > buttonX && testX < buttonX+100 && testY > buttonY && testY < buttonY + 30) {
+    return true;
+  }
+
+  // not over the button - return false
+  else {
+    return false;
+  }
 }
