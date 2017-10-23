@@ -18,73 +18,100 @@ function setup(){
 }
 
 function Shape(r, g, b){
-	// Position, size, color scheme (colors based on mood)
-	this.x = width/2;
-	this.y = height-10;
-
+	// Color (color scheme based on mood)
 	this.r = r;
 	this.g = g;
 	this.b = b;
 
-	// Original size
-	this.size = 20;
+	// Create random quadrangle at a random spot on the screen
+	// First vertex at random, keep other verteces close to it
+	this.vertexOneX = random(10, width-10);
+	this.vertexOneY = random(10, width-10);
+	this.vertexTwoX = this.vertexOneX + (random(-15, 15));
+	this.vertexTwoY = this.vertexOneY + (random(-15, 15));
+	this.vertexThreeX = this.vertexTwoX + (random(-15, 15));
+	this.vertexThreeY = this.vertexTwoY + (random(-15, 15));
+	this.vertexFourX = this.vertexThreeX + (random(-15, 15));
+	this.vertexFourY = this.vertexThreeY + (random(-15, 15));
+  	
 
-  	var spectrum = fft.analyze();
-	  noStroke();
-	  fill(0,255,0); // spectrum is green
-	  for (var i = 0; i< spectrum.length; i++){
-	    var x = map(i, 0, spectrum.length, 0, width);
-	    var h = -height + map(spectrum[i], 0, 255, height, 0);
-	    rect(x, height, width / spectrum.length, h )
-	  }
-
-  	var waveform = fft.waveform();
-  	noFill();
-  	beginShape();
-  	stroke(255,0,0); // waveform is red
-  	strokeWeight(1);
-  	for (var i = 0; i< waveform.length; i++){
-    	var x = map(i, 0, waveform.length, 0, width);
-    	var y = map( waveform[i], -1, 1, 0, height);
-    	vertex(x,y);
-  	}
-  	endShape();
-
-	this.moveAndDisplay = function(){
-		// Move with Perlin noise
-		// Change size based on waveform
-		// Add waveform's number to
+	this.display = function(){
+		noStroke();
+		fill(this.r, this.g, this.b);
+		beginShape();
+		vertex(this.vertexOneX, this.vertexOneY);
+		vertex(this.vertexTwoX, this.vertexTwoY);
+		vertex(this.vertexThreeX, this.vertexThreeY);
+		vertex(this.vertexFourX, this.vertexFourY);
+		endShape(CLOSE);
 	}
+
+	// Change size (pulsate) based on the waveform
+	this.pulsate = function(){
+		// Verteces move towards or away from the center of the shape based on the waveform
+		var waveform = fft.waveform(); // get waveform at that instant frame
+    	var change = map(waveform, -1, 1, -8, 8);
+  		this.vertexOneX += change
+  		this.vertexOneY += change
+  		this.vertexTwoX += change
+  		this.vertexTwoY += change
+  		this.vertexThreeX += change
+  		this.vertexThreeY += change
+  		this.vertexFourX += change
+  		this.vertexFourY += change
+  	}
+
+
+	//this.move = function(){}
+	// Move around the screen with Perlin noise
+
+	// Expire particles
+	// if((this.vertexOneX < 0) || (this.vertexOneY < 0) || (this.vertexTwoX > width) 
+	// || (this.vertexTwoY < 0)){
+	//	return true;
+	//}
 }
 
+
 function draw(){
+	var r, g, b;
+	var mood;
+	// Hues of pink and purple
 	if (mood == "happy"){
 		r = random(200, 255);
-		g = random(0, 10);
-		b = random(100, 170);
+		g = random(200, 255);
+		b = random(200, 255);
 		happySong.play();
+
+	// Hues of dark blue
 	} else if (mood == "chill"){
-		r = random(200, 255);
-		g = random(0, 10);
-		b = random(100, 170);
+		r = 0;
+		g = random(50, 100);
+		b = random(100, 255);
 		chillSong.play();
+
+	// Hues of yellow, green
 	} else if (mood == "energetic"){
-		r = random(200, 255);
-		g = random(0, 10);
-		b = random(100, 170);
+		r = random(50, 150);
+		g = 255;
+		b = random(0, 100);
 		energeticSong.play();
 	}
+	
 
-
-	for (int j = 0; j < 5000; j++){
+	for(var j = 0; j < 500; j++){
 		allShapes.push(new Shape(r, g, b));
 	}
 
-	for(var i = 0; i < fire.length; i++){
-		allShapes[i].moveAndDisplay();
-	}
+	for(var i = 0; i < allShapes.length; i++){
+		allShapes[i].display();
+		allShapes[i].pulsate();
+		//allShapes[i].move();
 
-	// Remove "expired" particles from the array
-	allShapes.splice(i, 1);
-	i -= 1;
+		// Remove "expired" particles from the array
+		if(allShapes[i] == true){
+			allShapes.splice(i, 1);
+			i -= 1;
+		}
+	}	
 }

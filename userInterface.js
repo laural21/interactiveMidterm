@@ -22,9 +22,8 @@ function setup(){
 
 	fill(255, 255, 255);
 	textSize(50);
-	text(question, width/2-250, 40); //CSS needed, size 30px, font-family?, color?
+	text(question, width/2-250, 50);
 	// Create visible buttons which change style when they are verbally selected
-
 
 	// Create speech to text object
     userInput = new p5.SpeechRec();
@@ -67,6 +66,10 @@ function chooseMood(){
 
 // Question only has to be asked once, when page is loaded or reloaded
 // Look for function/workaround for how to perform an action on page loaded
-window.onload = function(){
+//window.onload = function(){
+//	voice.speak(question);
+//}
+
+function keyPressed(){
 	voice.speak(question);
 }
