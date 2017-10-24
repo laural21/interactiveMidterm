@@ -15,6 +15,7 @@ var userInput;
 
 // Mood (selected verbally)
 var mood;
+var change[]; // Waveform mapped to a change in the sizes of the shapes
 
 function preload(){
 	myFont = loadFont("Fonts/TitilliumWeb-ExtraLight.ttf");
@@ -85,21 +86,8 @@ function draw(){
 
 	for(var i = 0; i < allShapes.length; i++){
 		allShapes[i].display();
-
-		// CRAIG: essentially turned off the pulsate function
-		// you will have to dig into this a little more to make it do what you want it to do
-		// I wouldn't have each object pull the waveform individually - if you have thousands
-		// of particles this will crash your program. just pull the waveform once and analyze
-		// it - all particles will respond the same way since the waveform doesn't change from/
-		// frame to frame
-		allShapes[i].pulsate();
+		allShapes[i].pulsate(change);
 		//allShapes[i].move();
-
-		// CRAIG: Remove "expired" particles from the array
-		// I just made this happen randomly, you need to implement this (or your program will run out of memory and crash)
-		if(random(1) > 0.99){
-			allShapes.splice(i, 1);
-			i -= 1;
 		}
 	}
 }
@@ -114,6 +102,7 @@ function chooseMood(){
 		// Simulate clicking of the "happy" button
 		mood = "happy";
 		happySong.play();
+
 	} else if (mostRecentWord == "chill"){
 		mood = "chill";
 		chillSong.play();
@@ -123,13 +112,16 @@ function chooseMood(){
 	} else {
 		return;
 	}
+	getWaveform();
 }
 
-// Question only has to be asked once, when page is loaded or reloaded
-// Look for function/workaround for how to perform an action on page loaded
-//window.onload = function(){
-//	voice.speak(question);
-//}
+function getWaveform(){
+	var waveform = fft.waveform();
+	for (var i = 0; i< waveform.length; i++){
+    	change += map(waveform[i], -1, 1, -8, 8);
+    }  
+}
+
 function Shape(r, g, b){
 	// Color (color scheme based on mood)
 	this.r = r;
@@ -161,19 +153,18 @@ function Shape(r, g, b){
 
 	// Change size (pulsate) based on the waveform
 	this.pulsate = function(){
-		/*
 		// Verteces move towards or away from the center of the shape based on the waveform
-		var waveform = fft.waveform(); // get waveform at that instant frame
-    	var change = map(waveform, -1, 1, -8, 8);
-  		this.vertexOneX += change
-  		this.vertexOneY += change
-  		this.vertexTwoX += change
-  		this.vertexTwoY += change
-  		this.vertexThreeX += change
-  		this.vertexThreeY += change
-  		this.vertexFourX += change
-  		this.vertexFourY += change
-			*/
+		for(var i = 0; i < change.length; i++){
+			this.vertexOneX += change[i];
+	  		this.vertexOneY += change[i];
+	  		this.vertexTwoX += change[i];
+	  		this.vertexTwoY += change[i];
+	  		this.vertexThreeX += change[i];
+	  		this.vertexThreeY += change[i];
+	  		this.vertexFourX += change[i];
+	  		this.vertexFourY += change[i];
+		}
+  		
   	}
 
 
