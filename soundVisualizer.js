@@ -15,7 +15,7 @@ var userInput;
 
 // Mood (selected verbally)
 var mood;
-var change[]; // Waveform mapped to a change in the sizes of the shapes
+var change = []; // Waveform mapped to a change in the sizes of the shapes
 
 function preload(){
 	myFont = loadFont("Fonts/TitilliumWeb-ExtraLight.ttf");
@@ -33,21 +33,21 @@ function setup(){
 	theCanvas.style('width', '100%');
 	theCanvas.style('height', '100%');
 
-	textFont(myFont);
+	 textFont(myFont);
 
 	// Create speech to text object
-  userInput = new p5.SpeechRec();
+    userInput = new p5.SpeechRec();
 
-  // Create voice object
-  voice = new p5.Speech();
+  	// Create voice object
+  	voice = new p5.Speech();
 
-  // Continuously detect input, change even in the middle of the song
-  userInput.continuous = true;
+  	// Continuously detect input, change even in the middle of the song
+  	userInput.continuous = true;
 
-  // Define a choose mood function
+  	// Define a choose mood function
 	userInput.onResult = chooseMood;
 
-  userInput.start();
+  	userInput.start();
 }
 
 function draw(){
@@ -79,16 +79,16 @@ function draw(){
 		b = random(0, 100);
 	}
 
-	// CRAIG: 500 particles is a lot to create each time!
 	for(var j = 0; j < 5; j++){
 		allShapes.push(new Shape(r, g, b));
 	}
 
 	for(var i = 0; i < allShapes.length; i++){
-		allShapes[i].display();
-		allShapes[i].pulsate(change);
-		//allShapes[i].move();
+		if(allShapes[i].displayAndMove()){
+			allShapes.splice(i, 1);
+			i -= 1;
 		}
+		allShapes[i].pulsate(change);
 	}
 }
 
@@ -139,16 +139,34 @@ function Shape(r, g, b){
 	this.vertexFourX = this.vertexThreeX + (random(-15, 15));
 	this.vertexFourY = this.vertexThreeY + (random(-15, 15));
 
+	// Create different noise offsets for the x and y coordinates of the verteces
+	this.xNoiseOffset = random(0,1000);
+  	this.yNoiseOffset = random(1000,2000);
 
-	this.display = function(){
+
+	this.displayAndMove = function(){
 		noStroke();
 		fill(this.r, this.g, this.b);
+
+		// Calculate movement
+		var xMovement = map(noise(this.xNoiseOffset), 0, 1, -1, 1 );
+    	var yMovement = map(noise(this.yNoiseOffset), 0, 1, -1, 1 );
+
 		beginShape();
-		vertex(this.vertexOneX, this.vertexOneY);
-		vertex(this.vertexTwoX, this.vertexTwoY);
-		vertex(this.vertexThreeX, this.vertexThreeY);
-		vertex(this.vertexFourX, this.vertexFourY);
+		vertex(this.vertexOneX + this.xNoiseOffset, this.vertexOneY + this.yNoiseOffset);
+		vertex(this.vertexTwoX + this.xNoiseOffset, this.vertexTwoY + this.yNoiseOffset);
+		vertex(this.vertexThreeX + this.xNoiseOffset, this.vertexThreeY + this.yNoiseOffset);
+		vertex(this.vertexFourX + this.xNoiseOffset, this.vertexFourY + this.yNoiseOffset);
 		endShape(CLOSE);
+		
+		this.xNoiseOffset += 0.01;
+    	this.yNoiseOffset += 0.01;
+		// Expire particles if they have moved off the screen
+		// It's enough to check if one of the verteces is off the screen
+	 	if((this.vertexOneX < 0) || (this.vertexOneY < 0) || (this.vertexOneX > width) || 
+	 		(this.vertexOneX > height)) {
+		return true;
+		}
 	}
 
 	// Change size (pulsate) based on the waveform
@@ -167,15 +185,7 @@ function Shape(r, g, b){
   		
   	}
 
-
-	//this.move = function(){}
 	// Move around the screen with Perlin noise
-
-	// Expire particles
-	// if((this.vertexOneX < 0) || (this.vertexOneY < 0) || (this.vertexTwoX > width)
-	// || (this.vertexTwoY < 0)){
-	//	return true;
-	//}
 }
 
 function keyPressed(){
