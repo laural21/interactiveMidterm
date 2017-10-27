@@ -66,35 +66,23 @@ function draw(){
 	var r, g, b;
 	// Hues of pink and purple
 	if (mood == "happy"){
-		r = random(200, 255);
-		g = random(200, 255);
-		b = random(200, 255);
 		getWaveform();
-
-		// CRAIG: You only want to add new shapes if you have a song picked out already
-		//        (otherwise you create shapes with colors that haven't been defined)
 		for(var j = 0; j < 2; j++){
-			allShapes.push(new Shape(r, g, b));
+			allShapes.push(new Shape(random(200, 255), random(200, 255), random(200, 255)));
 		}
 
 	// Hues of dark blue
 	} else if (mood == "chill"){
-		r = 0;
-		g = random(50, 100);
-		b = random(100, 255);
 		getWaveform();
 		for(var j = 0; j < 2; j++){
-			allShapes.push(new Shape(r, g, b));
+			allShapes.push(new Shape(0, random(50, 100), random(100, 255)));
 		}
 
 	// Hues of yellow, green
 	} else if (mood == "energetic"){
-		r = random(50, 150);
-		g = 255;
-		b = random(0, 100);
 		getWaveform();
 		for(var j = 0; j < 2; j++){
-			allShapes.push(new Shape(r, g, b));
+			allShapes.push(new Shape(random(50, 150), 255, random(0, 100)));
 		}
 
 	}
@@ -114,6 +102,7 @@ function draw(){
 
 // Moods controlled by buttons now
 function goHappy(){
+	background(0);
 	if(chillSong.isPlaying()){
 		chillSong.stop();
 	}
@@ -125,6 +114,7 @@ function goHappy(){
 }
 
 function goChill(){
+	background(0);
 	if(happySong.isPlaying()){
 		happySong.stop();
 	}
@@ -136,6 +126,7 @@ function goChill(){
 	}
 
 function goEnergetic(){
+	background(0);
 	if(chillSong.isPlaying()){
 		chillSong.stop();
 	}
@@ -177,7 +168,7 @@ function getWaveform(){
 	for (var i = 0; i< waveform.length; i++){
     	change += waveform[i];
     }
-    change = map(change, -1024, 1024, -8, 8);
+    change = map(change, -1024, 1024, -30, 30);
 }
 
 function Shape(r, g, b){
@@ -190,12 +181,12 @@ function Shape(r, g, b){
 	// First vertex at random, keep other verteces close to it
 	this.vertexOneX = random(10, width-10);
 	this.vertexOneY = random(10, width-10);
-	this.vertexTwoX = this.vertexOneX + (random(-15, 15));
-	this.vertexTwoY = this.vertexOneY + (random(-15, 15));
-	this.vertexThreeX = this.vertexTwoX + (random(-15, 15));
-	this.vertexThreeY = this.vertexTwoY + (random(-15, 15));
-	this.vertexFourX = this.vertexThreeX + (random(-15, 15));
-	this.vertexFourY = this.vertexThreeY + (random(-15, 15));
+	this.vertexTwoX = this.vertexOneX + (random(-40, 40));
+	this.vertexTwoY = this.vertexOneY + (random(-40, 40));
+	this.vertexThreeX = this.vertexTwoX + (random(-40, 40));
+	this.vertexThreeY = this.vertexTwoY + (random(-40, 40));
+	this.vertexFourX = this.vertexThreeX + (random(-40, 40));
+	this.vertexFourY = this.vertexThreeY + (random(-40, 40));
 
 	// Create different noise offsets for the x and y coordinates of the verteces
 	this.xNoiseOffset = random(0,1000);
@@ -208,8 +199,8 @@ function Shape(r, g, b){
 		fill(this.r, this.g, this.b);
 
 		// Calculate movement
-		var xMovement = map(noise(this.xNoiseOffset), 0, 1, -5, 5 );
-    	var yMovement = map(noise(this.yNoiseOffset), 0, 1, -5, 5 );
+		var xMovement = map(noise(this.xNoiseOffset), 0, 1, -10, 10);
+    	var yMovement = map(noise(this.yNoiseOffset), 0, 1, -10, 10 );
 
     	// Display and move around the screen with Perlin noise
 		beginShape();
