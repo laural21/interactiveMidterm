@@ -17,6 +17,16 @@
   </head>
     <!-- custom CSS -->
     <style>
+
+        .canvas-container {
+          position: relative;
+          width: screen.width;
+          height: screen.height;
+        }
+        #canvas {
+          position: absolute;
+        }
+
         button {
           display: inline-block;
           font-family: "Titillium Web", sans-serif;
@@ -25,16 +35,16 @@
           appearance: none;
           box-shadow: none;
           border-radius: 0;
-          width: 100px;
-          height: 30px;
+          width: 12%;
+          height: 4.5%;
         }
         button: focus {
           outline: none
         }
         .happy button {
           position: absolute;
-          top: 90px;
-          left: 210px;
+          top: 13%;
+          left: 18.5%;
           color: black;
           background-color: #ccffbc;
           border: none;
@@ -49,8 +59,8 @@
         }
         .chill button {
           position: absolute;
-          top: 90px;
-          left: 395px;
+          top: 13%;
+          left: 38.5%;
           color: black;
           background-color: #a5fcff;
           border: none;
@@ -65,8 +75,8 @@
         }
         .energetic button {
           position: absolute;
-          top: 90px;
-          right: 220px;
+          top: 13%;
+          left: 58.5%;
           color: black;
           background-color: #ff9ba7;
           border: none;
@@ -79,10 +89,12 @@
         .energetic button.active {
           background-color: #ff0000;
         }
+
     </style>
   </head>
 
-  <body>
+  <body class="canvas-container">
+    <canvas id="canvas" width="screen.width" height="screen.height"></canvas>
 
     <div class="happy">
       <button onclick="goHappy();">happy</button>
