@@ -102,7 +102,7 @@ function draw(){
 
 // Moods controlled by buttons now
 function goHappy(){
-	background(0);
+	allShapes = [];
 	if(chillSong.isPlaying()){
 		chillSong.stop();
 	}
@@ -114,7 +114,7 @@ function goHappy(){
 }
 
 function goChill(){
-	background(0);
+	allShapes = [];
 	if(happySong.isPlaying()){
 		happySong.stop();
 	}
@@ -126,7 +126,7 @@ function goChill(){
 	}
 
 function goEnergetic(){
-	background(0);
+	allShapes = [];
 	if(chillSong.isPlaying()){
 		chillSong.stop();
 	}
@@ -145,16 +145,36 @@ function chooseMood(){
 	// Select mood here; soundVisualizer plays music and does the visuals
 
 	if(mostRecentWord == "happy"){
-		// How to make the button appear clicked?
+		allShapes = [];
 		mood = "happy";
+		if(chillSong.isPlaying()){
+		chillSong.stop();
+	}
+	if(energeticSong.isPlaying()){
+		energeticSong.stop();
+	}
 		happySong.play();
 
 	} else if (mostRecentWord == "chill"){
+		allShapes = [];
 		mood = "chill";
+		if(happySong.isPlaying()){
+		happySong.stop();
+	}
+	if(energeticSong.isPlaying()){
+		energeticSong.stop();
+	}
 		chillSong.play();
 
 	} else if (mostRecentWord == "energetic"){
+		allShapes = [];
 		mood = "energetic";
+		if(chillSong.isPlaying()){
+		chillSong.stop();
+	}
+	if(happySong.isPlaying()){
+		happySong.stop();
+	}
 		energeticSong.play();
 
 	} else {
