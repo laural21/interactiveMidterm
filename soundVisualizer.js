@@ -15,7 +15,9 @@ var userInput;
 
 // Mood (selected verbally)
 var mood;
-var change = []; // Waveform mapped to a change in the sizes of the shapes
+
+var change = 0; // Waveform mapped to a change in the sizes of the shapes
+var fft;
 
 function preload(){
 	myFont = loadFont("Fonts/TitilliumWeb-ExtraLight.ttf");
@@ -33,7 +35,7 @@ function setup(){
 	theCanvas.style('width', '100%');
 	theCanvas.style('height', '100%');
 
-	 textFont(myFont);
+	textFont(myFont);
 
 	// Create speech to text object
     userInput = new p5.SpeechRec();
@@ -46,8 +48,10 @@ function setup(){
 
   	// Define a choose mood function
 	userInput.onResult = chooseMood;
-
   	userInput.start();
+
+	// When page loads, ask user what their mood is
+	voice.speak(question);
 }
 
 function draw(){
@@ -65,61 +69,115 @@ function draw(){
 		r = random(200, 255);
 		g = random(200, 255);
 		b = random(200, 255);
+		getWaveform();
+
+		// CRAIG: You only want to add new shapes if you have a song picked out already
+		//        (otherwise you create shapes with colors that haven't been defined)
+		for(var j = 0; j < 2; j++){
+			allShapes.push(new Shape(r, g, b));
+		}
 
 	// Hues of dark blue
 	} else if (mood == "chill"){
 		r = 0;
 		g = random(50, 100);
 		b = random(100, 255);
+		getWaveform();
+		for(var j = 0; j < 2; j++){
+			allShapes.push(new Shape(r, g, b));
+		}
 
 	// Hues of yellow, green
 	} else if (mood == "energetic"){
 		r = random(50, 150);
 		g = 255;
 		b = random(0, 100);
+		getWaveform();
+		for(var j = 0; j < 2; j++){
+			allShapes.push(new Shape(r, g, b));
+		}
+
 	}
 
-	for(var j = 0; j < 5; j++){
-		allShapes.push(new Shape(r, g, b));
-	}
-
+	console.log(allShapes.length);
 	for(var i = 0; i < allShapes.length; i++){
+
 		if(allShapes[i].displayAndMove()){
 			allShapes.splice(i, 1);
 			i -= 1;
+		} else {
+			allShapes[i].pulsate();
 		}
-		allShapes[i].pulsate(change);
 	}
+}
+
+
+// Moods controlled by buttons now
+function goHappy(){
+	if(chillSong.isPlaying()){
+		chillSong.stop();
+	}
+	if(energeticSong.isPlaying()){
+		energeticSong.stop();
+	}
+	mood = "happy";
+	happySong.play();
+}
+
+function goChill(){
+	if(happySong.isPlaying()){
+		happySong.stop();
+	}
+	if(energeticSong.isPlaying()){
+		energeticSong.stop();
+	}
+	mood = "chill";
+	chillSong.play();
+	}
+
+function goEnergetic(){
+	if(chillSong.isPlaying()){
+		chillSong.stop();
+	}
+	if(happySong.isPlaying()){
+		happySong.stop();
+	}
+	mood = "energetic";
+	energeticSong.play();
 }
 
 function chooseMood(){
 	// Recognize if the user selected a mood
 	var userWords = userInput.resultString.split(' ');
 	var mostRecentWord = userWords[ userWords.length-1 ];
-	
+	console.log(userWords);
 	// Select mood here; soundVisualizer plays music and does the visuals
+
 	if(mostRecentWord == "happy"){
-		// Simulate clicking of the "happy" button
+		// How to make the button appear clicked?
 		mood = "happy";
 		happySong.play();
 
 	} else if (mostRecentWord == "chill"){
 		mood = "chill";
 		chillSong.play();
+
 	} else if (mostRecentWord == "energetic"){
 		mood = "energetic";
 		energeticSong.play();
+
 	} else {
 		return;
 	}
-	getWaveform();
 }
 
 function getWaveform(){
 	var waveform = fft.waveform();
+	change = 0;
 	for (var i = 0; i< waveform.length; i++){
-    	change += map(waveform[i], -1, 1, -8, 8);
-    }  
+    	change += waveform[i];
+    }
+    change = map(change, -1024, 1024, -8, 8);
 }
 
 function Shape(r, g, b){
@@ -145,25 +203,29 @@ function Shape(r, g, b){
 
 
 	this.displayAndMove = function(){
+		
 		noStroke();
 		fill(this.r, this.g, this.b);
 
 		// Calculate movement
-		var xMovement = map(noise(this.xNoiseOffset), 0, 1, -1, 1 );
-    	var yMovement = map(noise(this.yNoiseOffset), 0, 1, -1, 1 );
+		var xMovement = map(noise(this.xNoiseOffset), 0, 1, -5, 5 );
+    	var yMovement = map(noise(this.yNoiseOffset), 0, 1, -5, 5 );
 
+    	// Display and move around the screen with Perlin noise
 		beginShape();
-		vertex(this.vertexOneX + this.xNoiseOffset, this.vertexOneY + this.yNoiseOffset);
-		vertex(this.vertexTwoX + this.xNoiseOffset, this.vertexTwoY + this.yNoiseOffset);
-		vertex(this.vertexThreeX + this.xNoiseOffset, this.vertexThreeY + this.yNoiseOffset);
-		vertex(this.vertexFourX + this.xNoiseOffset, this.vertexFourY + this.yNoiseOffset);
+		// CRAIG: you are adding the noiseOffset here - this is a huge number!  your shapes are going way off the screen.
+		//        you want to use the xMovement and yMovement values instead
+		vertex(this.vertexOneX + xMovement, this.vertexOneY + yMovement);
+		vertex(this.vertexTwoX + xMovement, this.vertexTwoY + yMovement);
+		vertex(this.vertexThreeX + xMovement, this.vertexThreeY + yMovement);
+		vertex(this.vertexFourX + xMovement, this.vertexFourY + yMovement);
 		endShape(CLOSE);
-		
+
 		this.xNoiseOffset += 0.01;
     	this.yNoiseOffset += 0.01;
 		// Expire particles if they have moved off the screen
 		// It's enough to check if one of the verteces is off the screen
-	 	if((this.vertexOneX < 0) || (this.vertexOneY < 0) || (this.vertexOneX > width) || 
+	 	if((this.vertexOneX < 0) || (this.vertexOneY < 0) || (this.vertexOneX > width) ||
 	 		(this.vertexOneX > height)) {
 		return true;
 		}
@@ -172,22 +234,13 @@ function Shape(r, g, b){
 	// Change size (pulsate) based on the waveform
 	this.pulsate = function(){
 		// Verteces move towards or away from the center of the shape based on the waveform
-		for(var i = 0; i < change.length; i++){
-			this.vertexOneX += change[i];
-	  		this.vertexOneY += change[i];
-	  		this.vertexTwoX += change[i];
-	  		this.vertexTwoY += change[i];
-	  		this.vertexThreeX += change[i];
-	  		this.vertexThreeY += change[i];
-	  		this.vertexFourX += change[i];
-	  		this.vertexFourY += change[i];
-		}
-  		
+		this.vertexOneX += change;
+  		this.vertexOneY += change;
+  		this.vertexTwoX += change;
+  		this.vertexTwoY += change;
+  		this.vertexThreeX += change;
+  		this.vertexThreeY += change;
+  		this.vertexFourX += change;
+  		this.vertexFourY += change;
   	}
-
-	// Move around the screen with Perlin noise
-}
-
-function keyPressed(){
-	voice.speak(question);
 }
