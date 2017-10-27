@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us">
   <head>
     <title>Midterm Project</title>
     <script src="p5/p5.min.js" type="text/javascript"></script>
@@ -17,7 +17,6 @@
   </head>
     <!-- custom CSS -->
     <style>
-
         button {
           display: inline-block;
           font-family: "Titillium Web", sans-serif;
@@ -29,11 +28,9 @@
           width: 100px;
           height: 30px;
         }
-
         button: focus {
           outline: none
         }
-
         .happy button {
           position: absolute;
           top: 90px;
@@ -42,17 +39,14 @@
           background-color: #ccffbc;
           border: none;
         }
-
         .happy button:hover,
         .happy button.hover {
           background-color: #00ff11;
         }
-
         .happy button:active,
         .happy button.active {
           background-color: #00ff11;
         }
-
         .chill button {
           position: absolute;
           top: 90px;
@@ -61,17 +55,14 @@
           background-color: #a5fcff;
           border: none;
         }
-
         .chill button:hover,
         .chill button.hover {
           background-color: #001dff;
         }
-
         .chill button:active,
         .chill button.active {
           background-color: #001dff;
         }
-
         .energetic button {
           position: absolute;
           top: 90px;
@@ -80,32 +71,29 @@
           background-color: #ff9ba7;
           border: none;
         }
-
         .energetic button:hover,
         .energetic button.hover {
           background-color: #ff0000;
         }
-
         .energetic button:active,
         .energetic button.active {
           background-color: #ff0000;
         }
-
     </style>
   </head>
 
   <body>
 
     <div class="happy">
-      <button>happy</button>
+      <button onclick="goHappy();">happy</button>
     </div>
 
     <div class="chill">
-      <button>chill</button>
+      <button onclick="goChill();">chill</button>
     </div>
 
     <div class="energetic">
-      <button>energetic</button>
+      <button onclick="goEnergetic();">energetic</button>
     </div>
 
   </body>
