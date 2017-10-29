@@ -188,7 +188,7 @@ function getWaveform(){
 	for (var i = 0; i< waveform.length; i++){
     	change += waveform[i];
     }
-    change = map(change, -1024, 1024, -30, 30);
+    change = map(change, -1024, 1024, -15, 15);
 }
 
 function Shape(r, g, b){
@@ -226,9 +226,9 @@ function Shape(r, g, b){
 		beginShape();
 		// CRAIG: you are adding the noiseOffset here - this is a huge number!  your shapes are going way off the screen.
 		//        you want to use the xMovement and yMovement values instead
-		vertex(this.vertexOneX + xMovement, this.vertexOneY + yMovement);
+		vertex(this.vertexOneX - xMovement, this.vertexOneY - yMovement);
 		vertex(this.vertexTwoX + xMovement, this.vertexTwoY + yMovement);
-		vertex(this.vertexThreeX + xMovement, this.vertexThreeY + yMovement);
+		vertex(this.vertexThreeX - xMovement, this.vertexThreeY - yMovement);
 		vertex(this.vertexFourX + xMovement, this.vertexFourY + yMovement);
 		endShape(CLOSE);
 
