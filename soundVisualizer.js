@@ -68,7 +68,7 @@ function draw(){
 	if (mood == "happy"){
 		getWaveform();
 		for(var j = 0; j < 2; j++){
-			allShapes.push(new Shape(random(200, 255), random(200, 255), random(200, 255)));
+			allShapes.push(new Shape(random(50, 150), 255, random(0, 100)));
 		}
 
 	// Hues of dark blue
@@ -82,7 +82,7 @@ function draw(){
 	} else if (mood == "energetic"){
 		getWaveform();
 		for(var j = 0; j < 2; j++){
-			allShapes.push(new Shape(random(50, 150), 255, random(0, 100)));
+			allShapes.push(new Shape(random(90, 255), random(0, 30), random(0, 50)));
 		}
 
 	}
