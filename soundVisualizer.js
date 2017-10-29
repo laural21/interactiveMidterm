@@ -29,6 +29,7 @@ function preload(){
 function setup(){
 	// Create new Fast Fourier Transform object
 	fft = new p5.FFT();
+	noiseDetail(24);
 
 	// CRAIG: This will make your canvas responsive to the screen being resized
 	var theCanvas = createCanvas(800, 600);
@@ -55,7 +56,6 @@ function setup(){
 }
 
 function draw(){
-
 	fill(0);
 	rect(0,0,800,600);
 
@@ -245,12 +245,12 @@ function Shape(r, g, b){
 	// Change size (pulsate) based on the waveform
 	this.pulsate = function(){
 		// Verteces move towards or away from the center of the shape based on the waveform
-		this.vertexOneX += change;
-  		this.vertexOneY += change;
+		this.vertexOneX -= change;
+  		this.vertexOneY -= change;
   		this.vertexTwoX += change;
   		this.vertexTwoY += change;
-  		this.vertexThreeX += change;
-  		this.vertexThreeY += change;
+  		this.vertexThreeX -= change;
+  		this.vertexThreeY -= change;
   		this.vertexFourX += change;
   		this.vertexFourY += change;
   	}
