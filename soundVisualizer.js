@@ -87,15 +87,31 @@ function draw(){
 
 	}
 
-	console.log(allShapes.length);
 	for(var i = 0; i < allShapes.length; i++){
-
-		if(allShapes[i].displayAndMove()){
-			allShapes.splice(i, 1);
-			i -= 1;
+		allShapes[i].displayAndMove();
+		var expired;
+		if (allShapes.length > 100){
+			var j = 0;
+			while(j < 2){
+				expired = random(0, allShapes.length-1);
+				if(expired == i){
+					allShapes.splice(i, 1);
+					i -= 1;
+				} else {
+					allShapes[i].pulsate();
+				}
+				j++;
+			}
 		} else {
-			allShapes[i].pulsate();
+			expired = random(0, allShapes.length-1);
+			if(expired == i){
+				allShapes.splice(i, 1);
+				i -= 1;
+			} else {
+				allShapes[i].pulsate();
+			}
 		}
+		
 	}
 }
 
@@ -141,7 +157,7 @@ function chooseMood(){
 	// Recognize if the user selected a mood
 	var userWords = userInput.resultString.split(' ');
 	var mostRecentWord = userWords[ userWords.length-1 ];
-	console.log(userWords);
+	
 	// Select mood here; soundVisualizer plays music and does the visuals
 
 	if(mostRecentWord == "happy"){
@@ -188,7 +204,7 @@ function getWaveform(){
 	for (var i = 0; i< waveform.length; i++){
     	change += waveform[i];
     }
-    change = map(change, -1024, 1024, -15, 15);
+    change = map(change, -1024, 1024, -20, 20);
 }
 
 function Shape(r, g, b){
@@ -210,7 +226,7 @@ function Shape(r, g, b){
 
 	// Create different noise offsets for the x and y coordinates of the verteces
 	this.xNoiseOffset = random(0,1000);
-  	this.yNoiseOffset = random(1000,2000);
+  	this.yNoiseOffset = random(10000,20000);
 
 
 	this.displayAndMove = function(){
@@ -219,27 +235,19 @@ function Shape(r, g, b){
 		fill(this.r, this.g, this.b);
 
 		// Calculate movement
-		var xMovement = map(noise(this.xNoiseOffset), 0, 1, -10, 10);
-    	var yMovement = map(noise(this.yNoiseOffset), 0, 1, -10, 10 );
+		var xMovement = map(noise(this.xNoiseOffset), 0, 1, -20, 20);
+    	var yMovement = map(noise(this.yNoiseOffset), 0, 1, -20, 20);
 
     	// Display and move around the screen with Perlin noise
 		beginShape();
-		// CRAIG: you are adding the noiseOffset here - this is a huge number!  your shapes are going way off the screen.
-		//        you want to use the xMovement and yMovement values instead
-		vertex(this.vertexOneX - xMovement, this.vertexOneY - yMovement);
+		vertex(this.vertexOneX + xMovement, this.vertexOneY + yMovement);
 		vertex(this.vertexTwoX + xMovement, this.vertexTwoY + yMovement);
-		vertex(this.vertexThreeX - xMovement, this.vertexThreeY - yMovement);
+		vertex(this.vertexThreeX + xMovement, this.vertexThreeY + yMovement);
 		vertex(this.vertexFourX + xMovement, this.vertexFourY + yMovement);
 		endShape(CLOSE);
 
 		this.xNoiseOffset += 0.01;
     	this.yNoiseOffset += 0.01;
-		// Expire particles if they have moved off the screen
-		// It's enough to check if one of the verteces is off the screen
-	 	if((this.vertexOneX < 0) || (this.vertexOneY < 0) || (this.vertexOneX > width) ||
-	 		(this.vertexOneX > height)) {
-		return true;
-		}
 	}
 
 	// Change size (pulsate) based on the waveform
@@ -248,10 +256,11 @@ function Shape(r, g, b){
 		this.vertexOneX -= change;
   		this.vertexOneY -= change;
   		this.vertexTwoX += change;
-  		this.vertexTwoY += change;
+  		this.vertexTwoY -= change;
   		this.vertexThreeX -= change;
-  		this.vertexThreeY -= change;
+  		this.vertexThreeY += change;
   		this.vertexFourX += change;
   		this.vertexFourY += change;
+  		
   	}
 }
