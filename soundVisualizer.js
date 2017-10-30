@@ -61,7 +61,7 @@ function draw(){
 
 	fill(255, 255, 255);
 	textSize(50);
-	text(question, width/2-250, 50);
+	text(question, width/2-210, 50);
 
 	var r, g, b;
 	// Hues of pink and purple
@@ -111,7 +111,7 @@ function draw(){
 				allShapes[i].pulsate();
 			}
 		}
-		
+
 	}
 }
 
@@ -157,7 +157,7 @@ function chooseMood(){
 	// Recognize if the user selected a mood
 	var userWords = userInput.resultString.split(' ');
 	var mostRecentWord = userWords[ userWords.length-1 ];
-	
+
 	// Select mood here; soundVisualizer plays music and does the visuals
 
 	if(mostRecentWord == "happy"){
@@ -230,7 +230,7 @@ function Shape(r, g, b){
 
 
 	this.displayAndMove = function(){
-		
+
 		noStroke();
 		fill(this.r, this.g, this.b);
 
@@ -261,6 +261,6 @@ function Shape(r, g, b){
   		this.vertexThreeY += change;
   		this.vertexFourX += change;
   		this.vertexFourY += change;
-  		
+
   	}
 }
